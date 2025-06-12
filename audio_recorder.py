@@ -66,19 +66,12 @@ class AudioRecorder:
     def stop_recording(self):
         if not self._is_recording:
             print("Not recording")
-            return
+            return None
         self._stop_event.set()
         self._thread.join()
+        return self.filename
 
     def __del__(self):
-        self.stop_recording()
+        if self.is_recording:
+            self.stop_recording()
         self._audio.terminate()
-
-
-if __name__ == "__main__":
-    recorder = AudioRecorder()
-    recorder.start_recording()
-
-    import time
-    time.sleep(5)
-    recorder.stop_recording()

@@ -1,0 +1,4 @@
+audio_recording_*.wav
+.ropeproject
+venv
+*.pyc
