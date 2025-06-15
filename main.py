@@ -2,6 +2,9 @@ import customtkinter as ctk
 import tkinter as tk
 from audio_recorder import AudioRecorder
 from time import time
+import pyperclip
+
+from groq_services import transcribe_audio
 
 
 class MainWindow(ctk.CTk):
@@ -47,6 +50,17 @@ class MainWindow(ctk.CTk):
         self.status_label.configure(
             text=f"Status: Stopped Recording, saved to {filename}"
         )
+        if filename and type(filename) == str:
+            transcription = transcribe_audio(filename)
+            if (
+                transcription is None
+                or type(transcription) != str
+                or len(transcription) == 0
+            ):
+                print("Transcription is empty")
+                return
+            pyperclip.copy(transcription)
+            print("Transcribed:", transcription)
 
 
 if __name__ == "__main__":

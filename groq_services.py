@@ -18,8 +18,8 @@ def transcribe_audio(filename=None):
             response_format="text"
         )
         return transcription
-    return ""
+    return None
 
 
 if __name__ == "__main__":
-    transcribe_audio("audio_recording_1749704814.0248532.wav")
+    transcribe_audio("audio_recording_1749962148.8610916.wav")
