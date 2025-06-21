@@ -3,3 +3,8 @@ audio_recording_*.wav
 venv
 *.pyc
 __pycache__
+
+# Remove build files from pyinstaller
+build
+dist
+main.spec
