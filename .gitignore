@@ -8,3 +8,5 @@ __pycache__
 build
 dist
 main.spec
+
+local_script.sh

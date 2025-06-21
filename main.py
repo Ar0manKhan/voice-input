@@ -23,11 +23,13 @@ class MainWindow(ctk.CTk):
         )
         self.status_label.place(relx=0.5, rely=0.1, anchor=tk.CENTER)
 
-        self.button = ctk.CTkButton(self.main_frame, text="Start", command=self.start)
+        self.button = ctk.CTkButton(self.main_frame, text="Stop", command=self.stop)
         self.button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-        # on press escape, stop the program
+        # Key bindings
         self.bind("<Escape>", self.on_escape)
+        self.bind("<space>", self.on_space)
+        self.focus_set()  # Ensure window can receive key events
 
         self.audio_recorder = AudioRecorder()
         self.temp_audio_file = None
@@ -42,6 +44,10 @@ class MainWindow(ctk.CTk):
             os.unlink(self.temp_audio_file)
         self.destroy()
 
+    def on_space(self, event):
+        print("pressed space")
+        self.stop()
+
     def start(self):
         # Create temporary file
         temp_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
@@ -49,14 +55,12 @@ class MainWindow(ctk.CTk):
         temp_file.close()
 
         self.audio_recorder.start_recording(filename=self.temp_audio_file)
-        self.button.configure(text="Stop")
-        self.button.configure(command=self.stop)
-        self.status_label.configure(text="Status: Started Recording")
+        self.status_label.configure(text="Status: Recording... (Press Space to stop)")
 
     def stop(self):
         filename = self.audio_recorder.stop_recording()
         self.button.place_forget()
-        self.status_label.configure(text="Status: Stopped Recording, processing...")
+        self.status_label.configure(text="Status: Processing transcription...")
 
         if filename and type(filename) == str:
             transcription = transcribe_audio(filename)
@@ -75,13 +79,15 @@ class MainWindow(ctk.CTk):
                 or len(transcription) == 0
             ):
                 print("Transcription is empty")
+                self.destroy()
                 return
 
             pyperclip.copy(transcription)
             print("Transcribed:", transcription)
-            self.status_label.configure(
-                text="Status: Transcription copied to clipboard"
-            )
+            print("Transcription copied to clipboard")
+
+            # Terminate the program after copying
+            self.destroy()
 
 
 if __name__ == "__main__":
