@@ -58,12 +58,23 @@ class MainWindow(ctk.CTk):
         self.status_label.configure(text="Status: Recording... (Press Space to stop)")
 
     def stop(self):
+        # Update status and force GUI refresh
+        self.status_label.configure(text="Status: Saving audio file...")
+        self.update()  # Force GUI update
+
         filename = self.audio_recorder.stop_recording()
         self.button.place_forget()
-        self.status_label.configure(text="Status: Processing transcription...")
 
         if filename and type(filename) == str:
+            # Update status for transcription
+            self.status_label.configure(text="Status: Transcribing audio file...")
+            self.update()  # Force GUI update
+
             transcription = transcribe_audio(filename)
+
+            # Update status for cleanup
+            self.status_label.configure(text="Status: Wrapping up...")
+            self.update()  # Force GUI update
 
             # Delete the temporary file after transcription
             try:
@@ -86,7 +97,16 @@ class MainWindow(ctk.CTk):
             print("Transcribed:", transcription)
             print("Transcription copied to clipboard")
 
-            # Terminate the program after copying
+            # Show final status briefly before terminating
+            self.status_label.configure(
+                text="Status: Transcription copied to clipboard!"
+            )
+            self.update()  # Force GUI update
+
+            # Small delay to show the final message
+            self.after(500, self.destroy)  # Destroy after 500ms
+        else:
+            print("No filename returned from audio recorder")
             self.destroy()
 
 
