@@ -1,10 +1,11 @@
-import customtkinter as ctk
-import tkinter as tk
-from audio_recorder import AudioRecorder
-import tempfile
 import os
+import tempfile
+import tkinter as tk
+
+import customtkinter as ctk
 import pyperclip
 
+from audio_recorder import AudioRecorder
 from groq_services import transcribe_audio
 
 
@@ -66,7 +67,7 @@ class MainWindow(ctk.CTk):
         filename = self.audio_recorder.stop_recording()
         self.button.place_forget()
 
-        if filename and type(filename) == str:
+        if filename and isinstance(filename, str):
             # Update status for transcription
             self.status_label.configure(text="Status: Transcribing audio file...")
             self.update()  # Force GUI update
@@ -87,7 +88,8 @@ class MainWindow(ctk.CTk):
 
             if (
                 transcription is None
-                or type(transcription) != str
+                # or type(transcription) != str
+                or not isinstance(transcription, str)
                 or len(transcription) == 0
             ):
                 print("Transcription is empty")

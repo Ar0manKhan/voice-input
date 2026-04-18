@@ -1,0 +1,52 @@
+[project]
+name = "voice-input"
+version = "0.1.0"
+description = "Voice input application using Groq API for speech-to-text transcription"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "annotated-types>=0.7.0",
+    "anyio>=4.9.0",
+    "certifi>=2025.4.26",
+    "customtkinter>=5.2.2",
+    "darkdetect>=0.8.0",
+    "distro>=1.9.0",
+    "groq>=0.27.0",
+    "h11>=0.16.0",
+    "httpcore>=1.0.9",
+    "httpx>=0.28.1",
+    "idna>=3.10",
+    "packaging>=25.0",
+    "pydantic>=2.11.5",
+    "pydantic-core>=2.33.2",
+    "pyperclip>=1.9.0",
+    "python-dotenv>=1.0.0",
+    "sniffio>=1.3.1",
+    "typing-extensions>=4.14.0",
+    "typing-inspection>=0.4.1",
+]
+
+[project.optional-dependencies]
+audio = ["pyaudio>=0.2.14"]
+
+[project.scripts]
+voice-input = "main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+include = ["main.py", "audio_recorder.py", "groq_services.py"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.uv.pip]
+generate-hashes = true
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.0.0",
+]

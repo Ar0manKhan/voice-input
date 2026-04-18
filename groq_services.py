@@ -1,6 +1,9 @@
 from os import environ, path
 from groq import Groq
+from dotenv import load_dotenv
 
+# Load environment variables from .env file if it exists
+load_dotenv()
 
 client = Groq(
     api_key=environ.get("GROQ_API_KEY"),
@@ -15,7 +18,7 @@ def transcribe_audio(filename=None):
         transcription = client.audio.transcriptions.create(
             file=(file_path, f.read()),
             model="whisper-large-v3-turbo",
-            response_format="text"
+            response_format="text",
         )
         return transcription
     return None
