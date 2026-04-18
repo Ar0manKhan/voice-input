@@ -40,6 +40,7 @@ class MainWindow(ctk.CTk):
     def on_escape(self, event):
         print("pressed escape")
         # Clean up temp file if it exists
+        self.audio_recorder.stop_recording()
         if self.temp_audio_file and os.path.exists(self.temp_audio_file):
             os.unlink(self.temp_audio_file)
         self.destroy()
@@ -110,5 +111,9 @@ class MainWindow(ctk.CTk):
             self.destroy()
 
 
-if __name__ == "__main__":
+def main():
     MainWindow()
+
+
+if __name__ == "__main__":
+    main()
